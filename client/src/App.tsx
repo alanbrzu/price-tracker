@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react'
 import viteLogo from '/vite.svg'
 
 import reactLogo from './assets/react.svg'
+import { apiUrl } from './utils'
 
 const getServerHome = async () => {
   try {
-    const res = await fetch('/api')
+    const res = await fetch(`${apiUrl}`)
     const data = await res.json()
     return data
   } catch (err) {
@@ -16,15 +17,15 @@ const getServerHome = async () => {
   }
 }
 
-// const getAllInstruments = async () => {
-//   try {
-//     const res = await fetch('/api/getInstrumentsAll')
-//     const data = await res.json()
-//     return data
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
+const getAllInstruments = async () => {
+  try {
+    const res = await fetch(`${apiUrl}getInstrumentsAll`)
+    const data = await res.json()
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 // const createUser = async () => {
 //   try {
@@ -48,9 +49,17 @@ function App() {
   useEffect(() => {
     const fetchHome = async () => {
       const res = await getServerHome()
-      console.log({ res })
+      console.log({ home: res })
     }
     fetchHome()
+  }, [])
+
+  useEffect(() => {
+    const fetchInstruments = async () => {
+      const res = await getAllInstruments()
+      console.log({ allInstruments: res })
+    }
+    fetchInstruments()
   }, [])
 
   return (

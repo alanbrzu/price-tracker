@@ -1,7 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import { db } from './db'
+import { db } from './db/config'
 import { findTimestamp } from './utils'
 
 dotenv.config()
