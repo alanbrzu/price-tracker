@@ -7,14 +7,14 @@ import { findTimestamp } from './utils'
 dotenv.config()
 
 const app = express()
-const port = process.env.PORT ?? 8000
+const port = 3001
 
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (_, res) => {
-    res.send('Express ts server')
+    res.status(200).send({ res: 'Express ts server' })
 })
 
 /** create new user */
@@ -47,7 +47,7 @@ app.get('/getInstrumentsAll', (_, res) => {
 app.get('/getInstrumentsUser', (req, res) => {
     const userId = req.body.userId
 
-    const FindQuery = 'SELECT i.* FROM instruments i JOIN user_favorites uf ON i.instrument_id = uf.instrument_id WHERE uf.user_id = ?'
+    const FindQuery = 'SELECT i.* FROM instruments i JOIN user_favorites uf ON i.id = uf.id WHERE uf.id = ?'
     db.query(FindQuery, [userId], (err, result) => {
         console.log('got user instruments and sent to client')
         res.send(result)
