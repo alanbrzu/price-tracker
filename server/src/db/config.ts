@@ -1,29 +1,26 @@
-import mysql from 'mysql2'
-import dotenv from 'dotenv'
+// import mysql from 'mysql2'
+// import dotenv from 'dotenv'
 
-dotenv.config()
+// dotenv.config()
 
-let dbConfig: mysql.PoolOptions
+// const [user, password, database] = ['MYSQL_USER', 'MYSQL_PASSWORD', 'price_tracker']
 
-const [user, password, database] = ['MYSQL_USER', 'MYSQL_PASSWORD', 'price_tracker']
+// const configOptions: { dev: mysql.PoolOptions, prod: mysql.PoolOptions } = {
+//     dev: {
+//         host: 'localhost',
+//         port: 9906,
+//         user,
+//         password,
+//         database,
+//     },
+//     prod: {
+//         host: 'mysql_db',
+//         user,
+//         password,
+//         database,
+//     }
+// }
 
-if (process.env.NODE_ENV === 'development') {
-    console.log('NODE_ENV development')
-    dbConfig = {
-        host: 'localhost',
-        port: 9906,
-        user,
-        password,
-        database
-    }
-} else {
-    console.log('NODE_ENV production')
-    dbConfig = {
-        host: 'mysql_db',
-        user,
-        password,
-        database
-    }
-}
+// const dbConfig = process.env.NODE_ENV === 'development' ? configOptions.dev : configOptions.prod
 
-export const db = mysql.createPool(dbConfig)
+// export const db = mysql.createPool(dbConfig)

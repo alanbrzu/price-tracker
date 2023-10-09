@@ -13,6 +13,7 @@ services:
       - SYS_NICE
     volumes:
       - "./setup.sql:/docker-entrypoint-initdb.d/setup.sql"
+      - mysql-data:/var/lib/mysql  # <-- data persistence
     ports:
       - "9906:3306"
     environment:
@@ -64,3 +65,6 @@ services:
         - mysql_db
       environment:
         ADMINER_DEFAULT_SERVER: mysql_db
+
+volumes:  # <-- Data persistence volume
+  mysql-data:  # <-- This defines the named volume

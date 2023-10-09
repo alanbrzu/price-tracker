@@ -1,21 +1,11 @@
 import './App.css'
 
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import viteLogo from '/vite.svg'
 
 import reactLogo from './assets/react.svg'
 import { apiUrl } from './utils'
-
-const getServerHome = async () => {
-  try {
-    const res = await fetch(`${apiUrl}`)
-    const data = await res.json()
-    return data
-  } catch (err) {
-    console.log(err)
-  }
-}
 
 const getAllInstruments = async () => {
   try {
@@ -27,32 +17,35 @@ const getAllInstruments = async () => {
   }
 }
 
-// const createUser = async () => {
-//   try {
-//     const res = await fetch('/api/createUser', {
-//       method: 'POST',
-//       body: JSON.stringify({
-//         email: '',
-//         password: '',
-//       }),
-//     })
-//     const data = await res.json()
-//     return data
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
+const createUser = async (email: string, password: string) => {
+  try {
+    const res = await fetch(`${apiUrl}user/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+    const data = await res.json()
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+type LoginForm = {
+  email: string
+  password: string
+}
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    const fetchHome = async () => {
-      const res = await getServerHome()
-      console.log({ home: res })
-    }
-    fetchHome()
-  }, [])
+  const [formData, setFormData] = useState<LoginForm>({
+    email: '',
+    password: '',
+  })
 
   useEffect(() => {
     const fetchInstruments = async () => {
@@ -61,6 +54,27 @@ function App() {
     }
     fetchInstruments()
   }, [])
+
+  const handleSubmit = async (event: { preventDefault: () => void }) => {
+    event.preventDefault()
+
+    const { email, password } = formData
+    const createRes = await createUser(email, password)
+    console.log(createRes)
+
+    setFormData({ email: '', password: '' })
+  }
+
+  const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }))
+  }
+
+  useEffect(() => {
+    console.log({ formData })
+  }, [formData])
 
   return (
     <>
@@ -73,13 +87,25 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          value={formData.email}
+          placeholder="Enter email"
+          onChange={onChange}
+        />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          placeholder="Enter password"
+          onChange={onChange}
+        />
+        <button type="submit">Create User</button>
+      </form>
     </>
   )
 }

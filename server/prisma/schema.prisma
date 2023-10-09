@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  created_at DateTime @default(now())
+
+  favorites UserFavorite[] // Relation field for user favorites
+
+  @@map("users") // table is named 'users' in the database
+}
+
+model Instrument {
+  id            Int      @id @default(autoincrement())
+  symbol        String   @unique
+  current_price Decimal  @db.Decimal(20, 8)
+  last_updated  DateTime @default(now())
+
+  favoritedBy UserFavorite[] // Relation field for users who favorited the instrument
+
+  @@map("instruments") // table is named 'instruments' in the database
+}
+
+model UserFavorite {
+  id            Int        @id @default(autoincrement())
+  user_id       Int
+  instrument_id Int
+  added_at      DateTime   @default(now())
+  user          User       @relation(fields: [user_id], references: [id])
+  instrument    Instrument @relation(fields: [instrument_id], references: [id])
+
+  @@unique([user_id, instrument_id]) // Composite unique constraint
+  @@map("user_favorites") // table user_favorites
+}

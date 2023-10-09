@@ -1,8 +1,3 @@
-import mysql from 'mysql2'
+import { PrismaClient } from "@prisma/client";
 
-export const db = mysql.createPool({
-    host: 'mysql_db',
-    user: 'MYSQL_USER',
-    password: 'MYSQL_PASSWORD',
-    database: 'price_tracker'
-})
+export const db = new PrismaClient()

@@ -55,6 +55,28 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+input {
+  border-radius: 8px;
+  border: 1px solid #ccc;  /* subtle border */
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 400; /* slightly lighter than the button for distinction */
+  font-family: inherit;
+  background-color: #f4f4f4; /* light background color for contrast */
+  transition: border-color 0.25s, box-shadow 0.25s;
+  width: 100%;
+  box-sizing: border-box;
+}
+input:hover {
+  border-color: #a5a5a5; /* subtle hover effect */
+}
+input:focus,
+input:focus-visible {
+  border-color: #646cff; /* matching focus color with the button */
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(100, 108, 255, 0.25); /* subtle glow effect instead of outline for focus */
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
