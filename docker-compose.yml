@@ -33,6 +33,8 @@ services:
       - "3050:80"
   
   api:
+    env_file:
+      - ./server/.env.production
     build:
       dockerfile: Dockerfile
       context: "./server"

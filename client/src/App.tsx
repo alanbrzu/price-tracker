@@ -9,7 +9,7 @@ import { apiUrl } from './utils'
 
 const getAllInstruments = async () => {
   try {
-    const res = await fetch(`${apiUrl}getInstrumentsAll`)
+    const res = await fetch(`${apiUrl}instrument/all`)
     const data = await res.json()
     return data
   } catch (err) {
