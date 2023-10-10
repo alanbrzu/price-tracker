@@ -36,10 +36,14 @@ h1 {
   line-height: 1.1;
 }
 
+p {
+  margin: 0;
+}
+
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  border: 1px solid #eee;
+  padding: 0.5em 1em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -48,11 +52,11 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #acaee4;
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto #acaee4;
 }
 
 input {
@@ -74,7 +78,7 @@ input:focus,
 input:focus-visible {
   border-color: #646cff; /* matching focus color with the button */
   outline: none;
-  box-shadow: 0 0 0 4px rgba(100, 108, 255, 0.25); /* subtle glow effect instead of outline for focus */
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.25); /* subtle glow effect instead of outline for focus */
 }
 
 @media (prefers-color-scheme: light) {
