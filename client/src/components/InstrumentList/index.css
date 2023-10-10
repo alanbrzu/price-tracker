@@ -1,0 +1,40 @@
+.instrumentsTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.instrumentsTable td {
+  border-top: 1px solid #ccc;
+  padding: 16px;
+  padding-right: 2rem;
+}
+
+.instrumentsTable th {
+  padding: 8px 16px;
+  background-color: #f2f2f2;
+}
+
+.instrumentsTable th, .instrumentsTable td {
+  text-align: left;
+  padding-right: 2rem;
+}
+
+.instrumentName {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 2rem;
+}
+
+.instrumentIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.instrumentsTable input {
+  cursor: pointer;
+}

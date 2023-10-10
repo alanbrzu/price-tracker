@@ -1,112 +1,27 @@
 import './App.css'
 
-import { ChangeEvent, useEffect, useState } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-import viteLogo from '/vite.svg'
-
-import reactLogo from './assets/react.svg'
-import { apiUrl } from './utils'
-
-const getAllInstruments = async () => {
-  try {
-    const res = await fetch(`${apiUrl}instrument/all`)
-    const data = await res.json()
-    return data
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-const createUser = async (email: string, password: string) => {
-  try {
-    const res = await fetch(`${apiUrl}user/create`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-    const data = await res.json()
-    return data
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-type LoginForm = {
-  email: string
-  password: string
-}
+import InstrumentList from './components/InstrumentList'
+import Navbar from './components/Navbar'
+import UserLogin from './components/UserLogin'
+import { useUserStore } from './userStore'
 
 function App() {
-  const [formData, setFormData] = useState<LoginForm>({
-    email: '',
-    password: '',
-  })
-
-  useEffect(() => {
-    const fetchInstruments = async () => {
-      const res = await getAllInstruments()
-      console.log({ allInstruments: res })
-    }
-    fetchInstruments()
-  }, [])
-
-  const handleSubmit = async (event: { preventDefault: () => void }) => {
-    event.preventDefault()
-
-    const { email, password } = formData
-    const createRes = await createUser(email, password)
-    console.log(createRes)
-
-    setFormData({ email: '', password: '' })
-  }
-
-  const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }))
-  }
-
-  useEffect(() => {
-    console.log({ formData })
-  }, [formData])
+  // state management for user
+  const user = useUserStore((state) => state.user)
+  const setUser = useUserStore((state) => state.setUser)
+  const clearUser = useUserStore((state) => state.clearUser)
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          value={formData.email}
-          placeholder="Enter email"
-          onChange={onChange}
-        />
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          placeholder="Enter password"
-          onChange={onChange}
-        />
-        <button type="submit">Create User</button>
-      </form>
-    </>
+    <Router>
+      <Navbar user={user} clearUser={clearUser} />
+      <Routes>
+        <Route path="/" element={<InstrumentList />} />
+        <Route path="/login" element={<UserLogin setUser={setUser} />} />
+        <Route path="/signup" element={<UserLogin setUser={setUser} />} />
+      </Routes>
+    </Router>
   )
 }
 
