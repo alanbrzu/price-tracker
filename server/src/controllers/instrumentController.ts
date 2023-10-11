@@ -7,7 +7,7 @@ import AsyncHandler from 'express-async-handler'
  */
 const allInstruments = AsyncHandler(async (_, res) => {
     const instruments = await db.instrument.findMany()
-    console.log('got instruments and sent to client')
+    console.log('/instruments/all success')
     res.status(200).json(instruments)
 })
 

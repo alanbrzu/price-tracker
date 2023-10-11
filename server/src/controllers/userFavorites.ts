@@ -32,11 +32,11 @@ const getUserFavorites = AsyncHandler(async (req, res) => {
     const userFavorites = await userFavoritesMethod(user_id)
 
     if (userFavorites) {
-        console.log('got user favorites')
+        console.log('/favorite/:user_id success')
         res.status(200).json(userFavorites)
     } else {
-        console.log('couldnt find user favorites')
-        res.status(204).json('No user favorites')
+        console.log('/favorite/:user_id no favorites status 204')
+        res.status(204).json([])
     }
 })
 
@@ -57,14 +57,13 @@ const addFavorite = AsyncHandler(async (req, res) => {
         throw new Error('User or instrument not found')
     }
 
-    /** @todo may need to check that its not already added */
-    const userFavorite = await db.userFavorite.create({
+    await db.userFavorite.create({
         data: {
             user: { connect: { id: user_id } },
             instrument: { connect: { id: instrument_id } }
         }
     })
-    console.log('added user favorite: ', { userFavorite })
+    console.log('/favorite/add success')
 
     /** query all userFavorites to send as response */
     const userFavorites = await userFavoritesMethod(user_id)
@@ -88,10 +87,8 @@ const removeFavorite = AsyncHandler(async (req, res) => {
         }
     })
 
-    /** @todo need to query all userFavorites to send as response */
-
     if (deletedFavorite) {
-        console.log('removed user favorite: ', { deletedFavorite })
+        console.log('/favorite/remove success')
 
         /** query all userFavorites to send as response */
         const userFavorites = await userFavoritesMethod(user_id)

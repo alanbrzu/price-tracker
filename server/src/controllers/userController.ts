@@ -33,7 +33,7 @@ const createUser = AsyncHandler(async (req, res) => {
             password: hashedPassword
         }
     })
-    console.log('created user')
+    console.log('/user/create success')
     res.status(201).json({ id: user.id, email: user.email })
 })
 
@@ -55,7 +55,7 @@ const loginUser = AsyncHandler(async (req, res) => {
     const passwordValid = await bcrypt.compare(password, user?.password ?? '')
 
     if (user && passwordValid) {
-        console.log('logged in user')
+        console.log('/user/login success')
         res.status(200).json({ id: user.id, email: user.email })
     } else {
         res.status(400).json('Invalid credentials')

@@ -19,11 +19,15 @@ export const loginOrCreateUser = async (email: string, password: string, loginOr
         password,
       }),
     })
-    if (!res.ok) {
+
+    const data = await res.json()
+
+    // we check for exceptions which should be shown to the user, otherwise throw error
+    const validExceptions = ['Invalid credentials', 'Email in use']
+    if (!res.ok && !validExceptions.includes(data)) {
       throw new Error(`Server responded with status: ${res.status}`)
     }
 
-    const data = await res.json()
     return data
   } catch (err) {
     console.log(err)
