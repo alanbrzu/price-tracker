@@ -9,8 +9,9 @@ CREATE TABLE IF NOT EXISTS users (
 -- Create the instruments table
 CREATE TABLE IF NOT EXISTS instruments (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    symbol VARCHAR(10) NOT NULL UNIQUE, -- Assuming symbols should be unique
-    current_price DECIMAL(20, 8) NOT NULL,
+    symbol VARCHAR(10) NOT NULL UNIQUE,
+    logo VARCHAR(255) NOT NULL,
+    current_price DECIMAL(20, 8) DEFAULT 0.0,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

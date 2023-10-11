@@ -2,26 +2,25 @@ import './index.css'
 
 import { useEffect, useState } from 'react'
 
-import { apiUrl } from '../../utils'
+import { User } from '../../userStore'
+import { getAllInstruments } from '../../utils/fetchFunctions'
+import Tooltip from '../Tooltip'
+import StarCheckbox from './StarCheckbox'
 
-const getAllInstruments = async () => {
-  try {
-    const res = await fetch(`${apiUrl}instrument/all`)
-    const data = await res.json()
-    return data
-  } catch (err) {
-    console.log(err)
-  }
-}
-
-type Instrument = {
+export type Instrument = {
   id: number
   symbol: string
+  logo: string
   current_price: number
   last_updated: string
 }
 
-export default function InstrumentList() {
+interface InstrumentListProps {
+  user: User
+  setUser: (user: User) => void
+}
+
+export default function InstrumentList({ user, setUser }: InstrumentListProps) {
   const [instruments, setInstruments] = useState<Instrument[]>()
 
   useEffect(() => {
@@ -31,10 +30,6 @@ export default function InstrumentList() {
     }
     fetchInstruments()
   }, [])
-
-  useEffect(() => {
-    console.log({ instruments })
-  }, [instruments])
 
   return (
     <table className="instrumentsTable">
@@ -46,20 +41,22 @@ export default function InstrumentList() {
         </tr>
       </thead>
       <tbody>
-        {instruments ? (
+        {instruments && instruments.length > 0 ? (
           <>
             {instruments.map((instrument, idx) => (
               <tr key={idx}>
                 <td>
-                  <input type="checkbox" />
+                  {!user ? (
+                    <Tooltip text="Log in to favorite">
+                      <StarCheckbox user={user} instrumentId={instrument.id} setUser={setUser} disabled={true} />
+                    </Tooltip>
+                  ) : (
+                    <StarCheckbox user={user} instrumentId={instrument.id} setUser={setUser} disabled={false} />
+                  )}
                 </td>
                 <td>
                   <div className="instrumentName">
-                    <img
-                      src="https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400"
-                      alt={instrument.symbol}
-                      className="instrumentIcon"
-                    />
+                    <img src={instrument.logo} alt={instrument.symbol} className="instrumentIcon" />
                     <p>{instrument.symbol}</p>
                   </div>
                 </td>
@@ -68,7 +65,22 @@ export default function InstrumentList() {
             ))}
           </>
         ) : (
-          <p>Loading...</p>
+          <tr>
+            <td>
+              <input type="checkbox" disabled />
+            </td>
+            <td>
+              <div className="instrumentName">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Circle_%28transparent%29.png/64px-Circle_%28transparent%29.png"
+                  alt="blankLogo"
+                  className="instrumentIcon"
+                />
+                <p>Loading...</p>
+              </div>
+            </td>
+            <td>0.0</td>
+          </tr>
         )}
       </tbody>
     </table>

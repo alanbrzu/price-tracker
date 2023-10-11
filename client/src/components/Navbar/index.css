@@ -11,11 +11,21 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 2rem;
-}
+} 
 
-.loginContainer {
+.homeContainer, .loginContainer {
   display: flex;
   gap: 1rem;
+}
+
+.homeContainer {
+  align-items: center;
+  gap: 2rem;
+  font-weight: 500;
+}
+
+.homeContainer a {
+  color: #213547;
 }
 
 .logo {

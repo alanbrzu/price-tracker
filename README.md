@@ -2,11 +2,9 @@
 
 ## Usage
 Will need the .env files in order to run.
+The client env files were uploaded with the api routes for prod and dev environments.
 
 In the root directory, run `docker-compose up --build`
-
-Access Adminer (db management) with `http://localhost:8000/`
-Login: `server=mysql_db`, `username=root`, `password=MYSQL_ROOT_PASSWORD`, `database=price_tracker`
 
 To use the application, open `http://localhost:3050/`.
 
@@ -22,4 +20,6 @@ Backend: Express NodeJS
 Database: MySQL + Prisma ORM
 
 ## Todo
-Add phone notifications for when an instrument price hits x.
+- Move database to separate server
+
+- Add phone notifications for when an instrument price hits x.

@@ -24,7 +24,8 @@ model User {
 model Instrument {
   id            Int      @id @default(autoincrement())
   symbol        String   @unique
-  current_price Decimal  @db.Decimal(20, 8)
+  logo          String
+  current_price Decimal  @default(0.0) @db.Decimal(20, 8)
   last_updated  DateTime @default(now())
 
   favoritedBy UserFavorite[] // Relation field for users who favorited the instrument

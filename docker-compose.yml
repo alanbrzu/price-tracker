@@ -69,4 +69,4 @@ services:
         ADMINER_DEFAULT_SERVER: mysql_db
 
 volumes:  # <-- Data persistence volume
-  mysql-data:  # <-- This defines the named volume
+  mysql-data:

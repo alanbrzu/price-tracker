@@ -1,35 +1,10 @@
 import './index.css'
 
 import { ChangeEvent, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { User } from '../../userStore'
-import { apiUrl } from '../../utils'
-
-/**
- * @dev based on the loginOrCreate param, we call either /user/{login || create}
- * @param loginOrCreate true=login; false=create
- */
-const loginOrCreateUser = async (email: string, password: string, loginOrCreate: boolean) => {
-  const url = `${apiUrl}user/${loginOrCreate ? 'login' : 'create'}`
-
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-    const data = await res.json()
-    return data
-  } catch (err) {
-    console.log(err)
-  }
-}
+import { getUserFavorites, loginOrCreateUser } from '../../utils/fetchFunctions'
 
 type LoginForm = {
   email: string
@@ -62,7 +37,10 @@ export default function UserLogin({ setUser }: UserLoginProps) {
     if (['Invalid credentials', 'Email in use'].includes(loginOrCreateRes)) {
       setErrorMessage(loginOrCreateRes)
     } else if ('id' in loginOrCreateRes && 'email' in loginOrCreateRes) {
-      setUser(loginOrCreateRes)
+      /** @dev if they logged in, get the user favorites */
+      const userFavorites = pathname === '/login' ? await getUserFavorites(loginOrCreateRes.id) : []
+      const user = { ...loginOrCreateRes, favorites: userFavorites }
+      setUser(user)
       navigate('/')
     }
     console.log({ loginOrCreateRes })
@@ -114,6 +92,11 @@ export default function UserLogin({ setUser }: UserLoginProps) {
           required
         />
         {errorMessage !== '' && <p className="errorMessage">Error: {errorMessage}</p>}
+        {pathname === '/login' && (
+          <p>
+            Don't have an account? <Link to="/signup">Sign up</Link>
+          </p>
+        )}
         <button type="submit">{pathname === '/login' ? 'Log in' : 'Sign up'}</button>
       </form>
     </>

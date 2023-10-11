@@ -10,6 +10,10 @@ form button {
   width: 100px;
 }
 
+form p {
+  font-size: 14px;
+}
+
 .errorMessage {  
   color: rgb(224, 0, 0);
   font-size: 14px;

@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import userRouter from './routes/userRoutes'
 import instrumentRouter from './routes/instrumentRoutes'
+import favoritesRouter from './routes/userFavorites'
 
 dotenv.config()
 
@@ -21,6 +22,7 @@ app.get('/', (_, res) => {
 // user and instrument routes
 app.use('/user', userRouter)
 app.use('/instrument', instrumentRouter)
+app.use('/favorite', favoritesRouter)
 
 // serve the server
 app.listen(port, () => console.log(`Server is running on port ${port}`)

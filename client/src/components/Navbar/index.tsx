@@ -15,9 +15,14 @@ export default function Navbar({ user, clearUser }: NavbarProps) {
   return (
     <div className="container">
       <div className="innerContainer">
-        <Link to="/">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </Link>
+        <div className="homeContainer">
+          <Link to="/">
+            <img src={viteLogo} className="logo" alt="Vite logo" />
+          </Link>
+          <Link to="/">
+            <p>Home</p>
+          </Link>
+        </div>
         <div className="loginContainer">
           {/* If user is logged in, show "Log out", otherwise show "Log in" and "Sign up" */}
           {user ? (

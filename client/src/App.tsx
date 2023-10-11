@@ -1,5 +1,6 @@
 import './App.css'
 
+import { useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 import InstrumentList from './components/InstrumentList'
@@ -13,11 +14,15 @@ function App() {
   const setUser = useUserStore((state) => state.setUser)
   const clearUser = useUserStore((state) => state.clearUser)
 
+  useEffect(() => {
+    console.log({ user })
+  }, [user])
+
   return (
     <Router>
       <Navbar user={user} clearUser={clearUser} />
       <Routes>
-        <Route path="/" element={<InstrumentList />} />
+        <Route path="/" element={<InstrumentList user={user} setUser={setUser} />} />
         <Route path="/login" element={<UserLogin setUser={setUser} />} />
         <Route path="/signup" element={<UserLogin setUser={setUser} />} />
       </Routes>
