@@ -2,17 +2,21 @@ import './index.css'
 
 import { useEffect } from 'react'
 
-import { useInstrumentsStore } from '../../state/instrumentsStore'
+import { PriceDirection, useInstrumentsStore } from '../../state/instrumentsStore'
 import { User } from '../../state/userStore'
+import { formatNumber } from '../../utils'
 import Tooltip from '../Tooltip'
 import StarCheckbox from './StarCheckbox'
 
-export type Instrument = {
-  id: number
-  symbol: string
-  logo: string
-  current_price: number
-  last_updated: string
+const getColor = (direction: PriceDirection | undefined) => {
+  switch (direction) {
+    case 'up':
+      return '#00A83E'
+    case 'down':
+      return '#FF3A33'
+    default:
+      return 'inherit'
+  }
 }
 
 interface InstrumentListProps {
@@ -34,7 +38,9 @@ export default function InstrumentList({ user, setUser }: InstrumentListProps) {
         <tr>
           <th></th>
           <th>Coin</th>
-          <th>Price</th>
+          <th>
+            Price <small>(USD)</small>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -57,7 +63,9 @@ export default function InstrumentList({ user, setUser }: InstrumentListProps) {
                     <p>{instrument.symbol}</p>
                   </div>
                 </td>
-                <td>{instrument.current_price}</td>
+                <td style={{ color: getColor(instrument.priceDirection) }}>
+                  <p className="priceCell">{formatNumber(parseFloat(instrument.current_price))}</p>
+                </td>
               </tr>
             ))}
           </>

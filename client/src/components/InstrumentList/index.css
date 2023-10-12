@@ -27,7 +27,13 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-right: 2rem;
+  margin-right: 1rem;
+  font-weight: 500;
+}
+
+.priceCell {
+  min-width: 100px;
+  font-size: 14px;
   font-weight: 500;
 }
 
