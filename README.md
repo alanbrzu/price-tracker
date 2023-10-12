@@ -20,10 +20,8 @@ Backend: Express NodeJS
 Database: MySQL + Prisma ORM
 
 ## Todo
-- Price updates.
+- Add price tracking (phone notifications) for when an instrument price hits x.
 
 - Move database to separate server.
-
-- Add phone notifications for when an instrument price hits x.
 
 - Usage of JWTs.

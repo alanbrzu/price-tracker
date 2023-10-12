@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { FaRegStar, FaStar } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
-import { User } from '../../userStore'
+import { User } from '../../state/userStore'
 import { addOrRemoveUserFavorite } from '../../utils/fetchFunctions'
 
 interface StarCheckboxProps {

@@ -3,7 +3,7 @@ import './index.css'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { User } from '../../userStore'
+import { User } from '../../state/userStore'
 import { getUserFavorites, loginOrCreateUser } from '../../utils/fetchFunctions'
 
 type LoginForm = {

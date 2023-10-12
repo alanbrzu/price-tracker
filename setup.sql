@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS instruments (
     symbol VARCHAR(10) NOT NULL UNIQUE,
     logo VARCHAR(255) NOT NULL,
     current_price DECIMAL(20, 8) DEFAULT 0.0,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Create the user_favorites table
@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS user_favorites (
 -- Database seeding
 -- Dumping data for table price_tracker.instruments: ~2 rows (approximately)
 INSERT IGNORE INTO `instruments` (`id`, `symbol`, `logo`, `current_price`, `last_updated`) VALUES
-	(2, 'BTCUSDT', 'https://raw.githubusercontent.com/Pymmdrza/Cryptocurrency_Logos/5f1b6a0588adeca87fb3259df2b65b0047dafc54/SVG/btc.svg', 0.00000000, '2023-10-10 17:49:00'),
-	(3, 'ETHUSDT', 'https://raw.githubusercontent.com/Pymmdrza/Cryptocurrency_Logos/5f1b6a0588adeca87fb3259df2b65b0047dafc54/SVG/eth.svg', 0.00000000, '2023-10-10 17:49:20'),
-    (4, 'SOLUSDT', 'https://raw.githubusercontent.com/Pymmdrza/Cryptocurrency_Logos/5f1b6a0588adeca87fb3259df2b65b0047dafc54/SVG/sol.svg', 0.00000000, '2023-10-10 17:51:20');
+	(1, 'BTCUSDT', 'https://raw.githubusercontent.com/Pymmdrza/Cryptocurrency_Logos/5f1b6a0588adeca87fb3259df2b65b0047dafc54/SVG/btc.svg', 0.00000000, '2023-10-10 17:49:00'),
+	(2, 'ETHUSDT', 'https://raw.githubusercontent.com/Pymmdrza/Cryptocurrency_Logos/5f1b6a0588adeca87fb3259df2b65b0047dafc54/SVG/eth.svg', 0.00000000, '2023-10-10 17:49:20'),
+    (3, 'SOLUSDT', 'https://raw.githubusercontent.com/Pymmdrza/Cryptocurrency_Logos/5f1b6a0588adeca87fb3259df2b65b0047dafc54/SVG/sol.svg', 0.00000000, '2023-10-10 17:51:20'),
+    (4, 'DOGEUSDT', 'https://raw.githubusercontent.com/Pymmdrza/Cryptocurrency_Logos/5f1b6a0588adeca87fb3259df2b65b0047dafc54/SVG/doge.svg', 0.00000000, '2023-10-10 17:51:20');
