@@ -1,9 +1,9 @@
 import './index.css'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
-import { User } from '../../userStore'
-import { getAllInstruments } from '../../utils/fetchFunctions'
+import { useInstrumentsStore } from '../../state/instrumentsStore'
+import { User } from '../../state/userStore'
 import Tooltip from '../Tooltip'
 import StarCheckbox from './StarCheckbox'
 
@@ -21,15 +21,12 @@ interface InstrumentListProps {
 }
 
 export default function InstrumentList({ user, setUser }: InstrumentListProps) {
-  const [instruments, setInstruments] = useState<Instrument[]>()
+  const instruments = useInstrumentsStore((state) => state.instruments)
+  const fetchInstruments = useInstrumentsStore((state) => state.fetchInstruments)
 
   useEffect(() => {
-    const fetchInstruments = async () => {
-      const res = await getAllInstruments()
-      setInstruments(res)
-    }
     fetchInstruments()
-  }, [])
+  }, [fetchInstruments])
 
   return (
     <table className="instrumentsTable">

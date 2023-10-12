@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-import { Instrument } from './components/InstrumentList'
+import { Instrument } from '../components/InstrumentList'
 
 export type User = {
   id: number
@@ -29,9 +29,3 @@ export const useUserStore = create<UserStore>()(
     }
   )
 )
-
-// export const useUserStore = create<UserStore>()((set) => ({
-//   user: null,
-//   setUser: (user: User) => set({ user }),
-//   clearUser: () => set({ user: null }),
-// }))
