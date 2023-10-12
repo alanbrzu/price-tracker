@@ -8,17 +8,24 @@ export type Instrument = {
   id: number
   symbol: string
   logo: string
-  current_price: number
+  current_price: string
   last_updated: string
 }
 
+export type PriceDirection = 'up' | 'down' | 'same'
+
+export type InstrumentWithPrevious = {
+  lastPrice?: string
+  priceDirection?: PriceDirection
+} & Instrument
+
 type UpdatedInstrument = {
   id: number
-  price: number
+  price: string
 }
 
 type InstrumentStore = {
-  instruments: Instrument[]
+  instruments: InstrumentWithPrevious[]
   fetchInstruments: () => Promise<void>
   updateInstrument: (updatedInstrument: UpdatedInstrument) => void
 }
@@ -33,9 +40,23 @@ export const useInstrumentsStore = create<InstrumentStore>()((set) => ({
 
   updateInstrument: (updatedInstrument: UpdatedInstrument) => {
     set((state) => ({
-      instruments: state.instruments.map((instrument) =>
-        instrument.id === updatedInstrument.id ? { ...instrument, current_price: updatedInstrument.price } : instrument
-      ),
+      instruments: state.instruments.map((instrument) => {
+        if (instrument.id === updatedInstrument.id) {
+          const currentPrice = parseFloat(instrument.current_price)
+          const updatedPrice = parseFloat(updatedInstrument.price)
+
+          const direction: PriceDirection =
+            currentPrice < updatedPrice ? 'up' : currentPrice > updatedPrice ? 'down' : 'same'
+
+          return {
+            ...instrument,
+            current_price: updatedPrice.toString(),
+            lastPrice: currentPrice.toString(),
+            priceDirection: direction,
+          }
+        }
+        return instrument
+      }),
     }))
   },
 }))
