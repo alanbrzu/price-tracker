@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import viteLogo from '/vite.svg'
 
-import { User } from '../../userStore'
+import { User } from '../../state/userStore'
 
 interface NavbarProps {
   user: User

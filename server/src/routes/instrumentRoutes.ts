@@ -1,8 +1,8 @@
 import express from "express"
-import { allInstruments } from "../controllers/instrumentController"
+import { getAllInstruments } from "../controllers/instrumentController"
 
 const instrumentRouter = express.Router()
 
-instrumentRouter.get('/all', allInstruments)
+instrumentRouter.get('/all', getAllInstruments)
 
 export default instrumentRouter

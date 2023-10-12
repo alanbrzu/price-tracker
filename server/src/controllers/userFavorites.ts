@@ -8,18 +8,22 @@ const reduceFavoritesToInstruments = (favorites: { instrument: Instrument }[] | 
 
 /** @returns find user favorites based on user_id */
 const userFavoritesMethod = async (user_id: number) => {
-    const user = await db.user.findUnique({
-        where: { id: user_id },
-        include: {
-            favorites: {
-                select: {
-                    instrument: true
+    try {
+        const user = await db.user.findUnique({
+            where: { id: user_id },
+            include: {
+                favorites: {
+                    select: {
+                        instrument: true
+                    }
                 }
             }
-        }
-    })
-
-    return reduceFavoritesToInstruments(user?.favorites)
+        })
+        return reduceFavoritesToInstruments(user?.favorites)
+    } catch (err) {
+        console.log(err)
+        throw new Error('couldnt get user favorites')
+    }
 }
 
 /**

@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import InstrumentList from './components/InstrumentList'
 import Navbar from './components/Navbar'
 import UserLogin from './components/UserLogin'
-import { useUserStore } from './userStore'
+import { useUserStore } from './state/userStore'
 
 function App() {
   // state management for user
