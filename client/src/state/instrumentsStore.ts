@@ -67,7 +67,7 @@ const socket = io(wsUrl)
 
 // connection
 socket.on('connect', () => {
-  console.log(`ws connected ${socket.id}`)
+  console.log(`ws connected`)
 })
 
 // price update msg
