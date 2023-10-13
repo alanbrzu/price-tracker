@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { User } from '../../state/userStore'
-import { getUserFavorites, loginOrCreateUser } from '../../utils/fetchFunctions'
+import { getUserFavorites, getUserPriceAlerts, loginOrCreateUser } from '../../utils/fetchFunctions'
 
 type LoginForm = {
   email: string
@@ -39,7 +39,8 @@ export default function UserLogin({ setUser }: UserLoginProps) {
     } else if ('id' in loginOrCreateRes && 'email' in loginOrCreateRes) {
       /** @dev if they logged in, get the user favorites */
       const userFavorites = pathname === '/login' ? await getUserFavorites(loginOrCreateRes.id) : []
-      const user = { ...loginOrCreateRes, favorites: userFavorites }
+      const priceAlerts = pathname === '/login' ? await getUserPriceAlerts(loginOrCreateRes.id) : []
+      const user = { ...loginOrCreateRes, favorites: userFavorites, priceAlerts }
       setUser(user)
       navigate('/')
     }
@@ -91,6 +92,7 @@ export default function UserLogin({ setUser }: UserLoginProps) {
           onChange={onChange}
           required
         />
+        {/* @todo Re-enter password */}
         {errorMessage !== '' && <p className="errorMessage">Error: {errorMessage}</p>}
         {pathname === '/login' && (
           <p>

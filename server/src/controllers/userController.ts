@@ -34,7 +34,7 @@ const createUser = AsyncHandler(async (req, res) => {
         }
     })
     console.log('/user/create success')
-    res.status(201).json({ id: user.id, email: user.email })
+    res.status(201).json({ id: user.id, email: user.email, phone_number: user.phone_number })
 })
 
 /**
@@ -56,7 +56,7 @@ const loginUser = AsyncHandler(async (req, res) => {
 
     if (user && passwordValid) {
         console.log('/user/login success')
-        res.status(200).json({ id: user.id, email: user.email })
+        res.status(200).json({ id: user.id, email: user.email, phone_number: user.phone_number })
     } else {
         res.status(400).json('Invalid credentials')
         throw new Error('Invalid credentials')

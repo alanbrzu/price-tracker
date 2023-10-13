@@ -1,0 +1,22 @@
+.alertsTable {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.alertsTable th {
+  padding: 8px 16px;
+  background-color: #f2f2f2;
+}
+
+.alertsTable td {
+  border-top: 1px solid #ccc;
+  padding: 16px;
+}
+
+.alertsTable th, .alertsTable td {
+  text-align: left;
+  padding-right: 2rem;
+}

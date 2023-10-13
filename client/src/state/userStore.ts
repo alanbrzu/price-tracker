@@ -6,8 +6,19 @@ import { Instrument } from './instrumentsStore'
 export type User = {
   id: number
   email: string
+  phone_number: string | null
   favorites: Instrument[]
+  priceAlerts: PriceAlerts[]
 } | null
+
+export type PriceAlerts = {
+  id: number
+  user_id: number
+  instrument_id: number
+  target_price: string
+  created_at: string
+  instrument: Instrument
+}
 
 type UserStore = {
   user: User

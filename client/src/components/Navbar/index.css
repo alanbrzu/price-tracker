@@ -4,6 +4,7 @@
   right: 0;
   width: 100vw;
   border-bottom: 1px solid #ddd;
+  background: #eee;
 }
 
 .innerContainer {
@@ -26,6 +27,9 @@
 
 .homeContainer a {
   color: #213547;
+}
+.homeContainer a:hover {
+  color: rgb(83, 121, 155);
 }
 
 .logo {

@@ -8,6 +8,8 @@ import cors from 'cors'
 import userRouter from './routes/userRoutes'
 import instrumentRouter from './routes/instrumentRoutes'
 import favoritesRouter from './routes/userFavorites'
+import priceAlertsRouter from './routes/priceAlertRoutes'
+
 import { setupPriceUpdates } from './priceUpdates'
 
 dotenv.config()
@@ -29,6 +31,7 @@ app.get('/', (_, res) => {
 app.use('/user', userRouter)
 app.use('/instrument', instrumentRouter)
 app.use('/favorite', favoritesRouter)
+app.use('/price_alert', priceAlertsRouter)
 
 /** websockets */
 const httpServer = http.createServer(app)

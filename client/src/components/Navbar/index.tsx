@@ -19,8 +19,11 @@ export default function Navbar({ user, clearUser }: NavbarProps) {
           <Link to="/">
             <img src={viteLogo} className="logo" alt="Vite logo" />
           </Link>
-          <Link to="/">
+          <Link to="/" style={{ marginLeft: '1rem' }}>
             <p>Home</p>
+          </Link>
+          <Link to="/priceAlerts">
+            <p>Alerts</p>
           </Link>
         </div>
         <div className="loginContainer">
