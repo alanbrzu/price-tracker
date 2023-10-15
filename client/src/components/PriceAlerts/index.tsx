@@ -1,9 +1,8 @@
 import './index.css'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { FaRegPlusSquare } from 'react-icons/fa'
 import { LuTrash } from 'react-icons/lu'
-import { useNavigate } from 'react-router-dom'
 
 import { InstrumentWithPrevious } from '../../state/instrumentsStore'
 import { User } from '../../state/userStore'
@@ -18,15 +17,9 @@ interface PriceAlertsProps {
 }
 
 export default function PriceAlerts({ user, setUser, instruments }: PriceAlertsProps) {
-  const navigate = useNavigate()
-
   const [popupOpen, setPopupOpen] = useState(false)
 
-  useEffect(() => {
-    console.log({ priceAlerts: user?.priceAlerts })
-  }, [user?.priceAlerts])
-
-  /** add a confirmation popup */
+  /** @todo add a confirmation popup */
   const handleDeletePriceAlert = async (priceAlertId: number) => {
     if (user) {
       const deleteAlertRes = await deletePriceAlert(user.id, priceAlertId)

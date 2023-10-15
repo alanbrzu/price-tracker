@@ -1,25 +1,14 @@
 import { db } from "../db"
 import AsyncHandler from 'express-async-handler'
-import { Instrument } from "@prisma/client"
-
-/** @returns instruments from user favorites */
-const reduceFavoritesToInstruments = (favorites: { instrument: Instrument }[] | undefined) =>
-    favorites?.map((favorite) => favorite.instrument)
 
 /** @returns find user favorites based on user_id */
 const userFavoritesMethod = async (user_id: number) => {
     try {
-        const user = await db.user.findUnique({
-            where: { id: user_id },
-            include: {
-                favorites: {
-                    select: {
-                        instrument: true
-                    }
-                }
-            }
+        const favorites = await db.userFavorite.findMany({
+            where: { user_id },
+            select: { instrument: true }
         })
-        return reduceFavoritesToInstruments(user?.favorites)
+        return favorites.map((favorite) => favorite.instrument)
     } catch (err) {
         console.log(err)
         throw new Error('couldnt get user favorites')

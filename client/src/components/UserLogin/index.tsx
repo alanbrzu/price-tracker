@@ -15,6 +15,7 @@ interface UserLoginProps {
   setUser: (user: User) => void
 }
 
+/** @todo make it so that after logging in, navigate to the page the user was on before logging in */
 export default function UserLogin({ setUser }: UserLoginProps) {
   const { pathname } = useLocation()
   const navigate = useNavigate()

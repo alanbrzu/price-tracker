@@ -1,6 +1,6 @@
 import './index.css'
 
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import viteLogo from '/vite.svg'
 
@@ -12,6 +12,8 @@ interface NavbarProps {
 }
 
 export default function Navbar({ user, clearUser }: NavbarProps) {
+  const { pathname } = useLocation()
+
   return (
     <div className="container">
       <div className="innerContainer">
@@ -20,10 +22,10 @@ export default function Navbar({ user, clearUser }: NavbarProps) {
             <img src={viteLogo} className="logo" alt="Vite logo" />
           </Link>
           <Link to="/" style={{ marginLeft: '1rem' }}>
-            <p>Home</p>
+            <p style={{ color: pathname === '/' ? 'rgb(83, 121, 155)' : 'inherit' }}>Home</p>
           </Link>
           <Link to="/priceAlerts">
-            <p>Alerts</p>
+            <p style={{ color: pathname === '/priceAlerts' ? 'rgb(83, 121, 155)' : 'inherit' }}>Alerts</p>
           </Link>
         </div>
         <div className="loginContainer">
