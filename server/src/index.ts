@@ -8,7 +8,10 @@ import cors from 'cors'
 import userRouter from './routes/userRoutes'
 import instrumentRouter from './routes/instrumentRoutes'
 import favoritesRouter from './routes/userFavorites'
+import priceAlertsRouter from './routes/priceAlertRoutes'
+
 import { setupPriceUpdates } from './priceUpdates'
+import usersSocketsManager from './priceUpdates/UsersSockets'
 
 dotenv.config()
 
@@ -29,20 +32,35 @@ app.get('/', (_, res) => {
 app.use('/user', userRouter)
 app.use('/instrument', instrumentRouter)
 app.use('/favorite', favoritesRouter)
+app.use('/price_alert', priceAlertsRouter) // invalid url from underscore?
 
 /** websockets */
 const httpServer = http.createServer(app)
 
-const io = new Server(httpServer, {
+export const io = new Server(httpServer, {
     cors: {
         origin: '*' /** @dev @todo change */
     }
 })
 
+// incoming messages update the user_id <-> socket.id
 io.on('connection', (socket) => {
-    console.log(`user connected ${socket.id}`)
+    const socketId = socket.id
+    console.log(`user connected ${socketId}`)
+
+    socket.on('userId', (userId) => {
+        if (userId) {
+            usersSocketsManager.addUserSocket(userId.toString(), socketId)
+        } else {
+            // remove the disconnected socket from `userSockets`
+            usersSocketsManager.removeSocket(socketId)
+        }
+    })
 
     socket.on('disconnect', () => {
+        // remove the disconnected socket from `userSockets`
+        usersSocketsManager.removeSocket(socketId)
+
         console.log(`${socket.id} disconnected`)
     })
 })

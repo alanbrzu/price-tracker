@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(15) DEFAULT NULL, -- for price alerts
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -23,7 +24,20 @@ CREATE TABLE IF NOT EXISTS user_favorites (
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (instrument_id) REFERENCES instruments(id),
-    UNIQUE (user_id, instrument_id) -- Ensure a user can't favorite the same instrument multiple times
+    UNIQUE (user_id, instrument_id) -- ensure a user can't favorite the same instrument multiple times
+);
+
+-- Create the price_alerts table
+CREATE TABLE IF NOT EXISTS price_alerts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    instrument_id INT NOT NULL,
+    target_price DECIMAL(20, 8) NOT NULL,
+    alert_type ENUM('ABOVE', 'BELOW') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (instrument_id) REFERENCES instruments(id),
+    UNIQUE (user_id, instrument_id, target_price) -- ensure a user can't create duplicate alerts
 );
 
 -- Database seeding

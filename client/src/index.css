@@ -6,6 +6,7 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
+  /* overflow-y: scroll; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -65,24 +66,24 @@ button:focus-visible {
 
 input {
   border-radius: 8px;
-  border: 1px solid #ccc;  /* subtle border */
+  border: 1px solid #ccc;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 400; /* slightly lighter than the button for distinction */
+  font-weight: 400;
   font-family: inherit;
-  background-color: #f4f4f4; /* light background color for contrast */
+  background-color: #f4f4f4;
   transition: border-color 0.25s, box-shadow 0.25s;
   width: 100%;
   box-sizing: border-box;
 }
 input:hover {
-  border-color: #a5a5a5; /* subtle hover effect */
+  border-color: #a5a5a5;
 }
 input:focus,
 input:focus-visible {
-  border-color: #646cff; /* matching focus color with the button */
+  border-color: #646cff;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.25); /* subtle glow effect instead of outline for focus */
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.25);
 }
 
 @media (prefers-color-scheme: light) {

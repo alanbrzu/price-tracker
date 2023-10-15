@@ -11,12 +11,14 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique
-  password   String
-  created_at DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  password     String
+  phone_number String?
+  created_at   DateTime @default(now())
 
-  favorites UserFavorite[] // Relation field for user favorites
+  favorites   UserFavorite[] // Relation field for user favorites
+  priceAlerts PriceAlert[] // Relation field for price alerts
 
   @@map("users") // table is named 'users' in the database
 }
@@ -29,18 +31,35 @@ model Instrument {
   last_updated  DateTime @default(now())
 
   favoritedBy UserFavorite[] // Relation field for users who favorited the instrument
+  priceAlerts PriceAlert[] // Relation field for price alerts
 
   @@map("instruments") // table is named 'instruments' in the database
 }
 
 model UserFavorite {
-  id            Int        @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   user_id       Int
   instrument_id Int
-  added_at      DateTime   @default(now())
-  user          User       @relation(fields: [user_id], references: [id])
-  instrument    Instrument @relation(fields: [instrument_id], references: [id])
+  added_at      DateTime @default(now())
 
-  @@unique([user_id, instrument_id]) // Composite unique constraint
+  user       User       @relation(fields: [user_id], references: [id])
+  instrument Instrument @relation(fields: [instrument_id], references: [id])
+
+  @@unique([user_id, instrument_id]) // unique constraint
   @@map("user_favorites") // table user_favorites
+}
+
+model PriceAlert {
+  id            Int      @id @default(autoincrement())
+  user_id       Int
+  instrument_id Int
+  target_price  Decimal  @db.Decimal(20, 8)
+  alert_type    String // 'ABOVE" or "BELOW"
+  created_at    DateTime @default(now())
+
+  user       User       @relation(fields: [user_id], references: [id])
+  instrument Instrument @relation(fields: [instrument_id], references: [id])
+
+  @@unique([user_id, instrument_id, target_price]) // unique constraint
+  @@map("price_alerts") // table 'price_alerts'
 }

@@ -2,6 +2,8 @@ import WebSocket from 'ws'
 import { allInstrumentsMethod, updateInstrumentPrices } from '../controllers/instrumentController'
 import { Server } from 'socket.io'
 import { dbHealthCheck } from '../utils'
+import priceAlertsManager from './PriceAlertsManager'
+import { sendMessage } from '../sms'
 
 export type LatestPrices = { [symbol: string]: string }
 
@@ -10,6 +12,7 @@ export type LatestPrices = { [symbol: string]: string }
  * @dev binance websocket rules:
  * - a single connection is valid for 24hr. after 24hr expect to be disconnected
  * - rate limits: 300 connection attempts / 5 min
+ * @dev for price alerts, we keep an in memory store and check the symbol for any price alerts we need to send
  */
 export const setupPriceUpdates = async (io: Server) => {
     console.log(new Date().toISOString(), 'starting price updates... ')
@@ -22,6 +25,9 @@ export const setupPriceUpdates = async (io: Server) => {
 
     const latestPrices: LatestPrices = {} // in-memory latest prices to update instruments in db
 
+    await dbHealthCheck() // health check for db before running
+    await priceAlertsManager.syncPriceAlerts() // before running, sync up price alerts
+
     const connectToExchange = async () => {
         console.log(new Date().toISOString(), 'starting connectToExchange...')
 
@@ -30,8 +36,6 @@ export const setupPriceUpdates = async (io: Server) => {
             exchangeSocket.close()
             exchangeSocket = null
         }
-
-        await dbHealthCheck() // health check for db before running
 
         const dbInstruments = await allInstrumentsMethod() // all instruments from db
 
@@ -71,6 +75,16 @@ export const setupPriceUpdates = async (io: Server) => {
 
                 if (symbol && typeof symbol === 'string' && price && typeof price === 'string') {
                     latestPrices[symbol] = price // update in-memory latest prices
+
+                    // check symbol and price against price alerts 
+                    const symbolPriceAlerts = priceAlertsManager.getPriceAlerts(symbol)
+                    /** @dev @todo may want to optimize.. lots of priceAlerts could be an issue */
+                    symbolPriceAlerts.forEach((priceAlert) => {
+                        if ((priceAlert.alert_type === 'ABOVE' && Number(price) >= Number(priceAlert.target_price)) || (priceAlert.alert_type === 'BELOW' && Number(price) <= Number(priceAlert.target_price))) {
+                            // send sms
+                            sendMessage(priceAlert.id, symbol, Number(priceAlert.target_price), Number(price), priceAlert.alert_type, priceAlert.phone_number)
+                        }
+                    })
 
                     const id = instrumentMap[symbol] // get id from symbol
 

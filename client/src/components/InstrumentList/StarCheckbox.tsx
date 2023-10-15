@@ -29,7 +29,7 @@ export default function StarCheckbox({ user, instrumentId, setUser, disabled }: 
       const addOrRemoveFavoriteRes = await addOrRemoveUserFavorite(user.id, instrumentId, !favorited ? 'add' : 'remove')
       console.log({ addOrRemoveFavoriteRes })
 
-      const newUser = { ...user, favorites: addOrRemoveFavoriteRes }
+      const newUser: User = { ...user, favorites: addOrRemoveFavoriteRes }
       setUser(newUser) // update user
     } else {
       navigate('/login') // navigate to login
