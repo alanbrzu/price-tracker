@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS price_alerts (
     user_id INT NOT NULL,
     instrument_id INT NOT NULL,
     target_price DECIMAL(20, 8) NOT NULL,
+    alert_type ENUM('ABOVE', 'BELOW') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (instrument_id) REFERENCES instruments(id),

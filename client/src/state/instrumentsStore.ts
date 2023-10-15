@@ -1,8 +1,7 @@
-import { io } from 'socket.io-client'
 import { create } from 'zustand'
 
-import { wsUrl } from '../utils'
 import { getAllInstruments } from '../utils/fetchFunctions'
+import socket from '../ws'
 
 export type Instrument = {
   id: number
@@ -38,6 +37,7 @@ export const useInstrumentsStore = create<InstrumentStore>()((set) => ({
     set({ instruments: data })
   },
 
+  /** @todo check the maximum depth thing: Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render. */
   updateInstrument: (updatedInstrument: UpdatedInstrument) => {
     set((state) => ({
       instruments: state.instruments.map((instrument) => {
@@ -60,15 +60,6 @@ export const useInstrumentsStore = create<InstrumentStore>()((set) => ({
     }))
   },
 }))
-
-/** websockets */
-// connection
-const socket = io(wsUrl)
-
-// connection
-socket.on('connect', () => {
-  console.log(`ws connected`)
-})
 
 // price update msg
 socket.on('priceUpdate', (updatedInstrument) => {

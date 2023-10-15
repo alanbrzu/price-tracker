@@ -4,12 +4,13 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 
 import { InstrumentWithPrevious } from '../../state/instrumentsStore'
-import { User } from '../../state/userStore'
+import { AlertType, User } from '../../state/userStore'
 import { addPriceAlert } from '../../utils/fetchFunctions'
 
 type PriceAlertForm = {
   instrumentId: number
   targetPrice: string
+  alertType: AlertType | ''
   phoneNumber: string
 }
 
@@ -24,10 +25,12 @@ interface PopupProps {
 
 const phoneNumberRegex = /^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/
 
+/** @dev @todo need to make sure the instrument current price doesnt move awa */
 export default function Popup({ user, setUser, instruments, open, onClose, chosenInstrument }: PopupProps) {
   const [formData, setFormData] = useState<PriceAlertForm>({
     instrumentId: 1,
     targetPrice: '',
+    alertType: '',
     phoneNumber: '',
   })
 
@@ -38,10 +41,20 @@ export default function Popup({ user, setUser, instruments, open, onClose, chose
       return
     }
 
+    const instrumentCurrentPrice = instruments.find(
+      (instrument) => instrument.id === formData.instrumentId
+    )?.current_price
+
+    const targetPrice = Number(formData.targetPrice)
+    const alertType = Number(instrumentCurrentPrice) > targetPrice ? 'BELOW' : 'ABOVE'
+
+    console.log({ targetPrice, instrumentCurrentPrice, alertType })
+
     const addPriceAlertRes = await addPriceAlert(
       user.id,
-      Number(chosenInstrument ? chosenInstrument.id : formData.instrumentId), // if there is a chosen instrument, send that
-      Number(formData.targetPrice),
+      Number(formData.instrumentId),
+      targetPrice,
+      alertType,
       formData.phoneNumber
     )
 
@@ -51,9 +64,11 @@ export default function Popup({ user, setUser, instruments, open, onClose, chose
         : { ...user, phone_number: formData.phoneNumber, priceAlerts: addPriceAlertRes }
     setUser(newUser)
 
+    // might not need to reset form data since everytime the popup opens it is reset
     setFormData({
       instrumentId: 1,
       targetPrice: '',
+      alertType: '',
       phoneNumber: '',
     })
     onClose()
@@ -66,8 +81,19 @@ export default function Popup({ user, setUser, instruments, open, onClose, chose
     }))
   }
 
+  // if user logs out while the popup is open, close it
+  useEffect(() => {
+    if (!user) {
+      onClose()
+    }
+  }, [onClose, user])
+
+  // set `formData.instrumentId` to chosenInstrument.id if it exists
   useEffect(() => {
     console.log({ chosenInstrument })
+    if (chosenInstrument) {
+      setFormData((prevState) => ({ ...prevState, instrumentId: chosenInstrument.id }))
+    }
   }, [chosenInstrument])
 
   return open ? (

@@ -9,6 +9,7 @@ import PriceAlerts from './components/PriceAlerts'
 import UserLogin from './components/UserLogin'
 import { useInstrumentsStore } from './state/instrumentsStore'
 import { useUserStore } from './state/userStore'
+import socket from './ws'
 
 function App() {
   // state management for user
@@ -27,6 +28,14 @@ function App() {
   useEffect(() => {
     console.log({ user })
   }, [user])
+
+  /** handles sending the server {userId: socketId} on refreshes, login and logout */
+  useEffect(() => {
+    const userId = user?.id
+    console.log({ userId })
+
+    socket.emit('userId', userId)
+  }, [user?.id])
 
   return (
     <Router>

@@ -54,6 +54,7 @@ model PriceAlert {
   user_id       Int
   instrument_id Int
   target_price  Decimal  @db.Decimal(20, 8)
+  alert_type    String // 'ABOVE" or "BELOW"
   created_at    DateTime @default(now())
 
   user       User       @relation(fields: [user_id], references: [id])

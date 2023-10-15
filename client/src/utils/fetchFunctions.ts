@@ -1,3 +1,4 @@
+import { AlertType } from '../state/userStore'
 import { apiUrl } from '.'
 
 /** user methods */
@@ -125,6 +126,7 @@ export const addPriceAlert = async (
   user_id: number,
   instrument_id: number,
   target_price: number,
+  alert_type: AlertType,
   phone_number: string
 ) => {
   try {
@@ -137,6 +139,7 @@ export const addPriceAlert = async (
         user_id,
         instrument_id,
         target_price,
+        alert_type,
         phone_number,
       }),
     })

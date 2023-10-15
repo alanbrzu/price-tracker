@@ -1,5 +1,6 @@
 import { db } from "../db"
 import AsyncHandler from 'express-async-handler'
+import priceAlertsManager from "../priceUpdates/PriceAlertsManager"
 
 /** @returns user price alerts + instrument */
 const userPriceAlertsMethod = async (user_id: number) => {
@@ -39,7 +40,7 @@ const getUserPriceAlerts = AsyncHandler(async (req, res) => {
  * @desc add a price alert
  */
 const addPriceAlert = AsyncHandler(async (req, res) => {
-    const { user_id, instrument_id, target_price, phone_number } = req.body
+    const { user_id, instrument_id, target_price, alert_type, phone_number } = req.body
 
     const user = await db.user.findUnique({ where: { id: user_id } })
     const instrument = await db.instrument.findUnique({ where: { id: instrument_id } })
@@ -67,19 +68,23 @@ const addPriceAlert = AsyncHandler(async (req, res) => {
     }
 
     // check target_price is valid
-    if (typeof target_price !== 'number') {
+    if (typeof target_price !== 'number' || !['ABOVE', 'BELOW'].includes(alert_type)) {
         res.status(400).json('Add all fields')
         throw new Error('Add all fields')
     }
 
-    await db.priceAlert.create({
+    const priceAlert = await db.priceAlert.create({
         data: {
             user_id,
             instrument_id,
             target_price,
+            alert_type,
         }
     })
     console.log('/price_alert/add success')
+
+    // add price alert to price alert manager
+    priceAlertsManager.addPriceAlert({ ...priceAlert, symbol: instrument.symbol, phone_number: user.phone_number ?? phone_number })
 
     const userPriceAlerts = await userPriceAlertsMethod(user_id)
     res.status(200).json(userPriceAlerts)
@@ -95,11 +100,15 @@ const deletePriceAlert = AsyncHandler(async (req, res) => {
     const deletedAlert = await db.priceAlert.delete({
         where: {
             id: price_alert_id
-        }
+        },
+        include: { instrument: true }
     })
 
     if (deletedAlert) {
         console.log('/price_alert/delete success')
+
+        // remove price alert from `priceAlertsManager`
+        priceAlertsManager.removePriceAlert(deletedAlert.instrument.symbol, deletedAlert.id)
 
         const userPriceAlerts = await userPriceAlertsMethod(user_id)
         res.status(200).json(userPriceAlerts)
@@ -109,4 +118,4 @@ const deletePriceAlert = AsyncHandler(async (req, res) => {
 
 })
 
-export { getUserPriceAlerts, addPriceAlert, deletePriceAlert }
+export { getUserPriceAlerts, addPriceAlert, deletePriceAlert, userPriceAlertsMethod }
